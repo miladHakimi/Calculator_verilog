@@ -73,7 +73,8 @@ assign is_hash = rom_data == 8'd10;
 // assign is_lt = ((converted_operator == 2'd1 && top_operator == 2'd0) || 
 // 			(converted_operator == 2'd3 && top_operator == 2'd2) ||
 // 			(converted_operator < top_operator)) ? 1 : 0;
-assign is_lt = (converted_operator==ADD && top_operator==SUB);
+assign is_lt = (converted_operator==ADD && (top_operator==SUB || top_operator==MULT || top_operator==DIV))
+ 		|| (converted_operator==SUB && (top_operator==MULT || top_operator==DIV)) ;
 
 always @(posedge clk) begin
 	if (rst || num_clr) begin
