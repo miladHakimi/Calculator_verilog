@@ -15,6 +15,7 @@ module seg_display (
 		if(rst) begin
 			counter <= 15'b0;
 			seg_sel <= 5'b00001;
+			data_out = 0;
 		end
 		
 		else if(start) begin

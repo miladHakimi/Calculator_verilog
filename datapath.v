@@ -22,7 +22,9 @@ module datapath (
 	output is_empty,
 	output is_hash,
 	output [7:0] data_out,
-	output [7:0] rm
+	output [7:0] rm,
+	output rfd,
+	output is_div
 );
 
 localparam ADD = 0,
@@ -39,7 +41,7 @@ wire [7:0] top_operand;
 wire [7:0] operand_data_in;
 wire [7:0] operator_data_in;
 wire [7:0] divider_out, fractional;
-wire operand_empty, rfd;
+wire operand_empty;
 
 reg [7:0] num0, num1, num2;
 reg [6:0] rom_index;
@@ -48,7 +50,6 @@ reg [7:0] op1, op2;
 reg [7:0] operator;
 assign rm = op2;
 ROM rom(.rst(rst), .index(rom_index), .out(rom_data));
-
 converter_ascii_number ascii_converter(rom_data, converted_asci);
 convert_to_number decimal_converter(num0, num1, num2, mode, convereted_decimal);
 operator_converter operator_converter(rom_data, converted_operator);
@@ -56,7 +57,7 @@ operator_converter operator_converter(rom_data, converted_operator);
 stack operands(.rst(rst), .clk(clk), .data_in(operand_data_in), .push_en(operand_push), .pop_en(operand_pop), .data_out(top_operand), .is_empty(operand_empty));
 stack operators(.rst(rst), .clk(clk), .data_in(converted_operator), .push_en(operator_push), .pop_en(operator_pop), .data_out(top_operator), .is_empty(is_empty));
 
-/*divider divider (
+divider divider (
 	.clk(clk), // input clk
 	.rfd(rfd), // output rfd
 	.dividend(op1), // input [7 : 0] dividend
@@ -64,6 +65,7 @@ stack operators(.rst(rst), .clk(clk), .data_in(converted_operator), .push_en(ope
 	.quotient(divider_out), // output [7 : 0] quotient
 	.fractional(fractional)
 ); // output [7 : 0] fractional*/
+assign is_div = top_operator == DIV;
 
 assign data_out = top_operand;
 assign operand_data_in = sel ? result : convereted_decimal;
@@ -73,7 +75,7 @@ assign is_hash = rom_data == 8'd10;
 // assign is_lt = ((converted_operator == 2'd1 && top_operator == 2'd0) || 
 // 			(converted_operator == 2'd3 && top_operator == 2'd2) ||
 // 			(converted_operator < top_operator)) ? 1 : 0;
-assign is_lt = (converted_operator==ADD && (top_operator==SUB || top_operator==MULT || top_operator==DIV))
+assign is_lt = is_empty? 0: (converted_operator==ADD && (top_operator==SUB || top_operator==MULT || top_operator==DIV))
  		|| (converted_operator==SUB && (top_operator==MULT || top_operator==DIV)) ;
 
 always @(posedge clk) begin
@@ -115,7 +117,7 @@ always @(posedge clk) begin
 		rom_index = rom_index + 1;
 end
 
-always @(posedge clk) begin
+always @(negedge clk) begin
 	if (rst)
 		result = 0;
 	else if (result_en) begin

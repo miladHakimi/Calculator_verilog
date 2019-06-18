@@ -13,15 +13,15 @@ module ROM(
 		if (rst) begin
 			// reset
 			rom[0] = 8'd1;//1
-			rom[1] = 8'd5;//0
-			rom[2] = 8'd22;//*
-			rom[3] = 8'd1;//1
-			rom[4] = 8'd0;//0
+			rom[1] = 8'd0;//0
+			rom[2] = 8'd23;//*
+			rom[3] = 8'd2;//1
+			/*rom[4] = 8'd0;//0
 			rom[5] = 8'd20;
-			rom[6] = 8'd9;
+			rom[6] = 8'd9;*/
 			//rom[3] = 8'd43;//+
 			//rom[4] = 8'd52;//4
-			rom[7] = 8'd10;//#
+			rom[4] = 8'd10;//#
 		end
 	end
 	assign out = rom[index];
