@@ -14,11 +14,13 @@ module ROM(
 			// reset
 			rom[0] = 8'd5;//5
 			rom[1] = 8'd5;//5
-			rom[2] = 8'd21;//1
+			rom[2] = 8'd20;//1
 			rom[3] = 8'd1;//1
+			rom[4] = 8'd1;//1
+
 			//rom[3] = 8'd43;//+
 			//rom[4] = 8'd52;//4
-			rom[4] = 8'd10;//#
+			rom[5] = 8'd10;//#
 		end
 	end
 	assign out = rom[index];

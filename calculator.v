@@ -24,7 +24,7 @@ wire [35:0] CONTROL0;
 debug2 YourInstanceName (
     .CONTROL(CONTROL0), // INOUT BUS [35:0]
     .CLK(clk), // IN
-    .DATA({data_out, is_operand, is_operator, is_hash, operator_push, operand_push, num0_en,num1_en}), // IN BUS [8:0]
+    .DATA({data_out,sel, is_operand, is_operator, is_hash, operator_push, operand_push, num0_en,num1_en}), // IN BUS [8:0]
     //.DATA({data_out, inx}),
 	 .TRIG0({start, 1'b0}) // IN BUS [1:0]
 );

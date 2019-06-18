@@ -41,7 +41,7 @@ always @(ps, start, is_operand, is_operator, is_empty, is_hash, is_lt) begin
 				else if (is_operand) ns=2;
 			  else if(is_hash) ns = 9;
 		5'd8: ns = 1;
-		5'd14: ns = 14;
+		5'd15: ns = 15;
 		default: ns = ps + 1;
 	endcase
 end
@@ -86,66 +86,67 @@ always @(ps) begin
 			else if (count==2)
 				num2_en = 1;
 			index_cnt = 1;
-			operand_push = 1;
+			// operand_push = 1;
 		end
 
 		5'd3: begin
 			mode = count-1;
 		end
 
-		5'd4: begin
-			operand_pop = 1;
-			operand_push = 1;
-			num1_en = 1;
-			index_cnt = 1;
-		end
+		// 5'd4: begin
+		// 	operand_pop = 1;
+		// 	operand_push = 1;
+		// 	num1_en = 1;
+		// 	index_cnt = 1;
+		// end
 
-		5'd5: begin
-			mode = 2'd1;
-		end
+		// 5'd5: begin
+		// 	mode = 2'd1;
+		// end
 
-		5'd6: begin
-			operand_pop = 1;
-			operand_push = 1;
-			num2_en = 1;
-			index_cnt = 1;
-		end
+		// 5'd6: begin
+		// 	operand_pop = 1;
+		// 	operand_push = 1;
+		// 	num2_en = 1;
+		// 	index_cnt = 1;
+		// end
 
-		5'd7: begin
-			mode = 2'd2;
-			// operand_push = 1;
-		end
+		// 5'd7: begin
+		// 	mode = 2'd2;
+		// 	// operand_push = 1;
+		// end
 
 		5'd8: begin
-			// operand_push = 1;
+			operand_push = 1;
 			operator_push = 1;
 			index_cnt = 1;
-			// sel = 0;
 		end
 
 		5'd9: begin
+			operand_push = 1;
+		end
+		5'd10: begin
 			op2_en = 1;
 			operator_en = 1;
 		end
-
-		5'd10: begin
+		5'd11: begin
 			operand_pop = 1;
 			operator_pop = 1;
 		end
-		5'd11: begin
+		5'd12: begin
 			op1_en = 1;
 		end
-		5'd12: begin
+		5'd13: begin
 			result_en = 1;
 			operand_pop = 1;
 			// operand_push = 1;
 			// result_en = 1;
 		end
-		5'd13: begin
+		5'd14: begin
 			sel = 1;
 			operand_push = 1;
 		end
-		5'd14: begin
+		5'd15: begin
 			// operator_push = 1;
 			// index_cnt = 1;
 			// sel = 1;

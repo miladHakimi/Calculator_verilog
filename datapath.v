@@ -65,7 +65,7 @@ stack operators(.rst(rst), .clk(clk), .data_in(converted_operator), .push_en(ope
 	.fractional(fractional)
 ); // output [7 : 0] fractional*/
 
-assign data_out = convereted_decimal;
+assign data_out = top_operand;
 assign operand_data_in = sel ? result : convereted_decimal;
 assign is_operand = (rom_data >= 0 && rom_data < 10) ? 1 : 0;
 assign is_operator = (rom_data >= 20 && rom_data <= 30) ? 1 : 0;
