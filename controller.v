@@ -8,6 +8,7 @@ module controller(
 	input is_empty,
 	input is_hash,
 	input is_div,
+	input op_is_empty,
 	output reg num0_en,
 	output reg num1_en,
 	output reg num2_en,
@@ -43,12 +44,16 @@ always @(ps, start, is_operand, is_operator, is_empty, is_hash, is_lt, is_div) b
 				else if (is_operand) ns=2;
 			  else if(is_hash) ns = 9;
 		5'd8: ns = 1;
+		5'd10: if(op_is_empty) ns = 16;
+				else ns = 11;
 		5'd14: if(is_div &&  div_count<15 ) ns = 5'd14;
 				else ns = 5'd15;
+		5'd15: if(op_is_empty) ns = 16;
+				else ns = 10;
 		5'd16: ns = 16;
 		5'd22: if(div_count<15 && is_div) ns = 5'd22;
 				else ns = 5'd23;
-		5'd23: ns = 1;
+		5'd24: ns = 1;
 		default: ns = ps + 1;
 	endcase
 end
@@ -60,8 +65,12 @@ always @(posedge clk) begin
 	end
 	else begin
 		ps <= ns;
-		if (is_div && ps>8)
+		if (ps==10)
+			div_count <= 0;
+
+		if (is_div && ps>10)
 			div_count <= div_count + 1;
+
 		if (ps==2)
 			count <= count + 1;
 		if (ps==1) begin
@@ -145,16 +154,18 @@ always @(ps) begin
 		end
 		5'd19: begin
 			operand_pop = 1;
-			operator_pop = 1;
 		end
 		5'd20: begin
 			op1_en = 1;
 		end
 		5'd21: begin
-			result_en = 1;
 			operand_pop = 1;
 		end
 		5'd23: begin
+			operator_pop = 1;
+			result_en = 1;
+		end
+		5'd24: begin
 			sel = 1;
 			operand_push = 1;
 			operator_push = 1;

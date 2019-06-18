@@ -24,7 +24,8 @@ module datapath (
 	output [7:0] data_out,
 	output [7:0] rm,
 	output rfd,
-	output is_div
+	output is_div,
+	output op_is_empty
 );
 
 localparam ADD = 0,
@@ -49,6 +50,7 @@ reg [7:0] result;
 reg [7:0] op1, op2;
 reg [7:0] operator;
 assign rm = op2;
+assign op_is_empty = is_empty;
 ROM rom(.rst(rst), .index(rom_index), .out(rom_data));
 converter_ascii_number ascii_converter(rom_data, converted_asci);
 convert_to_number decimal_converter(num0, num1, num2, mode, convereted_decimal);
@@ -76,7 +78,8 @@ assign is_hash = rom_data == 8'd10;
 // 			(converted_operator == 2'd3 && top_operator == 2'd2) ||
 // 			(converted_operator < top_operator)) ? 1 : 0;
 assign is_lt = is_empty? 0: (converted_operator==ADD && (top_operator==SUB || top_operator==MULT || top_operator==DIV))
- 		|| (converted_operator==SUB && (top_operator==MULT || top_operator==DIV)) ;
+ 		|| (converted_operator==SUB && (top_operator==MULT || top_operator==DIV)) 
+		|| (converted_operator==DIV && (top_operator==MULT || top_operator==DIV));
 
 always @(posedge clk) begin
 	if (rst || num_clr) begin

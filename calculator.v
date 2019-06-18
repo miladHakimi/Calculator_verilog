@@ -13,7 +13,7 @@ module calculator
 
 wire is_operand, is_operator, is_lt, is_empty, is_hash,
 	num0_en, num1_en, num2_en, index_cnt, sel, operand_push, operator_push,
-	operand_pop, operator_pop, num_clr, result_en, op1_en, op2_en, operator_en, rfd, is_dev;
+	operand_pop, operator_pop, num_clr, result_en, op1_en, op2_en, operator_en, rfd, is_dev, op_is_empty;
 wire [1:0] mode;
 wire [7:0] data_out, inx;
 wire [4:0] seg_sel12, ps;
@@ -24,7 +24,7 @@ wire [35:0] CONTROL0;
 debug2 YourInstanceName (
     .CONTROL(CONTROL0), // INOUT BUS [35:0]
     .CLK(clk), // IN
-    .DATA({data_out,sel, is_operand, is_operator, is_hash, operator_push, operand_push, num0_en,is_div}), // IN BUS [8:0]
+    .DATA({data_out,sel, is_operand, is_operator, is_hash, operator_push, operand_push, num0_en,done}), // IN BUS [8:0]
     //.DATA({data_out, inx}),
 	 .TRIG0({start, 1'b0}) // IN BUS [1:0]
 );
@@ -32,13 +32,13 @@ debug1 YourInstanceName1 (
     .CONTROL0(CONTROL0) // INOUT BUS [35:0]
 );
 
-controller ctrl(clk, rst, start, is_operand, is_operator, is_lt, is_empty, is_hash, is_div, 
+controller ctrl(clk, rst, start, is_operand, is_operator, is_lt, is_empty, is_hash, is_div, op_is_empty,
 				num0_en, num1_en, num2_en, index_cnt, sel, operand_push, operator_push,
 				operand_pop, operator_pop, num_clr, result_en, op1_en, op2_en,
 				operator_en, mode, done, ps);
 datapath dp(clk, rst, num0_en, num1_en, num2_en, index_cnt, sel, mode, operand_push,
 			operand_pop, operator_push, operator_pop, num_clr, result_en, op1_en,
-			op2_en, operator_en, is_operand, is_operator, is_lt, is_empty, is_hash, data_out, inx, rfd, is_div);
+			op2_en, operator_en, is_operand, is_operator, is_lt, is_empty, is_hash, data_out, inx, rfd, is_div, op_is_empty);
 seg_display sd(rst, clk, done, data_out, seg_out, seg_sel);
 //assign seg_out = data_out[6:0];
 //sassign seg_sel = 5'b00001;
