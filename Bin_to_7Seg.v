@@ -18,7 +18,7 @@ module Bin_to_7Seg(
 			4'd11: seg = 7'b1111100;
 			4'd12: seg = 7'b0111001;
 			4'd13: seg = 7'b1011110;
-			4'd14: seg = 7'b1111100;
+			4'd14: seg = 7'b1111001;
 			4'd15: seg = 7'b1110001;
 		endcase
 	end
